@@ -8,6 +8,7 @@ import AdminLogin from "./Admin/pages/Login.jsx";
 import Dashboard from "./Admin/pages/Dashboard.jsx";
 import AdminProducts from "./Admin/pages/AdminProduct.jsx"
 import AddProducts from "./Admin/pages/AddProduct.jsx";
+import SingleProduct from "./pages/SingleProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path:"/admin/add-products",
         element:<AddProducts />
+      },
+      {
+        path:"/product/:slug",
+        element:<SingleProduct />
       },
     ]
   }

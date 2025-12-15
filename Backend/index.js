@@ -12,19 +12,21 @@ app.use(express.json());
 
 await connectToDB();
 
+
 app.use("/uploads", express.static("uploads"));
+
 
 
 app.use(
     cors({
-    origin :"http://localhost:5173",
-    credentials:true,
-}));
+        origin: "http://localhost:5173",
+        credentials: true,
+    }));
 
 // app.use("/",router);
 // app.use("/product",productRouter);
-app.use("/user",authRouter);
-app.use("/admin",adminRouter);
-app.use("/product",productRouter);
+app.use("/user", authRouter);
+app.use("/admin", adminRouter);
+app.use("/product", productRouter);
 
 app.listen(3000, () => console.log("Server started at port 3000"));

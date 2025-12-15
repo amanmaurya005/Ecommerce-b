@@ -73,6 +73,16 @@ export async function getProducts(req, res) {
     return res.status(500).json({ message: error.message });
   }
 }
+export async function getSingleProduct(req, res) {
+  try {
+    const {slug}=req.params;
+
+    const singleProduct = await Product.find({slug:slug});
+    return res.status(200).json(singleProduct);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
 
 export async function checkSlug(req, res) {
   try {

@@ -78,6 +78,15 @@ function AddProduct() {
             alert("Something went wrong!");
         }
         // console.log(...product)
+        setData({
+            name: "",
+        slug: "",
+        category: "",
+        description: "",
+        originalPrice: "",
+        discountedPrice: "",
+        image: null
+        })
     }
 
     return (
