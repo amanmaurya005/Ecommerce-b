@@ -1,0 +1,229 @@
+/* GLOBAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* New Modern Color Theme */
+:root {
+    --mainColor: #6C5CE7;
+    --hoverColor: #5946d2;
+    --lightBg: #f5f3ff;
+    --textDark: #2d2d2d;
+}
+
+/* HEADER */
+.header {
+    width: 100%;
+    height: 70px;
+    background: var(--mainColor);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    box-shadow: 0 3px 12px rgba(108, 92, 231, 0.3);
+}
+
+.logo a {
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+/* SEARCH BAR */
+.search-box {
+    display: flex;
+    width: 40%;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cfc8ff;
+    outline: none;
+    border-radius: 8px 0 0 8px;
+    background: white;
+}
+
+.search-box button {
+    background: var(--hoverColor);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 0 8px 8px 0;
+    color: white;
+    font-size: 18px;
+}
+
+.search-box button:hover {
+    background: #4634b3;
+}
+
+/* HEADER ICONS */
+.icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.icon {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s ease-in-out;
+}
+
+.icon:hover {
+    color: #eaeaff;
+}
+
+/* FOOTER */
+.footer {
+    width: 100%;
+    background: var(--mainColor);
+    color: white;
+    padding: 30px 20px;
+    margin-top: 70px;
+    text-align: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.footer-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.footer-links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: #e4e0ff;
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* HOME PAGE WELCOME */
+.home-welcome {
+    text-align: center;
+    margin-top: 60px;
+    padding: 40px;
+    background: white;
+    width: 60%;
+    margin-inline: auto;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(108, 92, 231, 0.15);
+    border-left: 6px solid var(--mainColor);
+}
+
+.home-welcome h2 {
+    font-size: 32px;
+    color: var(--mainColor);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.home-welcome p {
+    font-size: 18px;
+    color: var(--textDark);
+    margin-bottom: 10px;
+}
+
+/* PAGE HEADINGS */
+div > h2 {
+    text-align: center;
+    margin-top: 30px;
+    color: var(--mainColor);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* PROFESSIONAL FORM */
+form {
+    width: 820px;
+    padding: 35px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e4e0ff;
+    box-shadow: 0px 8px 22px rgba(108, 92, 231, 0.15);
+}
+
+/* Form group */
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--textDark);
+}
+
+/* INPUTS */
+.form-group input {
+    padding: 14px;
+    width: 90%;
+    border: 1px solid #c7c2ff;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s ease-in-out;
+    background: var(--lightBg);
+}
+
+.form-group input:focus {
+    border-color: var(--mainColor);
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(108, 92, 231, 0.4);
+}
+
+/* Submit Button */
+button[type="submit"] {
+    width: 130px;
+    padding: 14px;
+    background: var(--mainColor);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: var(--hoverColor);
+    transform: scale(1.04);
+}
+
+/* Container Fix */
+#reg {
+    margin: auto;
+}
+
