@@ -2,10 +2,11 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import "../App.css"
+import { useAuth } from '../contexts/AuthProvider' 
 
 
 function Login() {
-
+  const {isLoggedIn,setIsLoggedIn} = useAuth();
   const navigate = useNavigate()
 
   const [data, setData] = useState({
@@ -22,6 +23,7 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
 
+
     try {
       const response = await axios.post(
         "http://localhost:3000/user/login", data,
@@ -32,7 +34,6 @@ function Login() {
 
       console.log("Login success", response.data)
       alert("login in successfully")
-
       navigate("/")
     }
 

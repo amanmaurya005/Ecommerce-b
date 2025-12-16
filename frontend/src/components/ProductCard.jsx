@@ -38,7 +38,7 @@ function ProductCard ({product,slug}) {
     {/* Button */}
     <button className="mt-4 w-full rounded-lg bg-orange-500 py-2 text-sm font-semibold text-white transition-all hover:bg-orange-600 active:scale-95">
       Add to Cart
-    </button>
+    </button> 
   </div>
 </div>
 

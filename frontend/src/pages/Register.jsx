@@ -36,14 +36,9 @@ function Register() {
 
       console.log("User Registered:", response.data);
       
-      if(response.data.user.role==="user"){
         alert("User registration successful!");
         navigate("/login");
-      }
-      else{
-        alert("admin registration successful!");
-        navigate("/admin/login");
-      }
+    
     } catch (error) {
       console.error("Registration Error:", error);
 
@@ -121,13 +116,7 @@ function Register() {
           />
         </div>
 
-        <div>
-          <select value={data.role} name="role" onChange={handleChange} required>
-            <option value="">select role</option>
-            <option value="user" >User</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
+       
 
         <button type="submit">Register</button>
       </form>

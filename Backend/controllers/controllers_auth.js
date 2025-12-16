@@ -61,11 +61,12 @@ export async function loginUser(req, res) {
 }
 export async function logoutUser(req, res) {
     try {
-        res.cookie("auth_Token", auth_Token), {
+        res.cookie("auth_token", " "), {
             httpOnly: true,
             secure: true,
             sameSite: "none",
             maxAge: -1,  // any negative time
+
         };
         return res.status(200).json({ message: "user Logged out" });
 
@@ -93,6 +94,7 @@ export async function registerUser(req, res) {
 
         };
 
+        data.role="user";
         //  Password Hashing
         const hashedPassword = await bcrypt.hash(data.password, 10);
         data.password = hashedPassword;
