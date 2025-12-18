@@ -25,16 +25,16 @@ export async function loginUser(req, res) {
         if (!UserExist)
             return res.status(400).json({ message: "User not found" });
 
-        
-        
+
+
         const doesPasswordMatch = await bcrypt.compare(data.password, UserExist.password);
         if (!doesPasswordMatch)
             return res.status(404).json({ message: "password not match" });
         console.log(doesPasswordMatch);
 
         if (UserExist.role !== "user")
-        return res.status(404).json({ message: "You are not a user" });
-        
+            return res.status(404).json({ message: "You are not a user" });
+
         const auth_token = jwt.sign({
             id: UserExist._id,
             role: UserExist.role,
@@ -47,7 +47,7 @@ export async function loginUser(req, res) {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 3600000,
+            maxAge: 3600*1000,
         });
 
         return res.status(200).json({ message: "LogedIn" });
@@ -61,7 +61,7 @@ export async function loginUser(req, res) {
 }
 export async function logoutUser(req, res) {
     try {
-        res.cookie("auth_token", " "), {
+        res.cookie("auth_token", ""), {
             httpOnly: true,
             secure: true,
             sameSite: "none",
@@ -94,7 +94,7 @@ export async function registerUser(req, res) {
 
         };
 
-        data.role="user";
+        data.role = "user";
         //  Password Hashing
         const hashedPassword = await bcrypt.hash(data.password, 10);
         data.password = hashedPassword;

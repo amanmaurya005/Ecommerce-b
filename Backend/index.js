@@ -13,12 +13,13 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(express.json());
 
+app.use(cookieParser());
+
 await connectToDB();
 
 
 app.use("/uploads", express.static("uploads"));
 
-app.use(cookieParser());
 
 app.use(
     cors({

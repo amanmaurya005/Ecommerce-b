@@ -2,18 +2,18 @@ import jwt from "jsonwebtoken"
 import "dotenv/config"
 
 export async function checkAuth(req, res, next) {
-    try{
-        const token=req.cookies.auth_token;
-        if(!token)
-            return res.status(401).json({message:"you need to log in to perform this action"});
+    try {
+        const token = req.cookies.auth_token;
+        if (!token)
+            return res.status(401).json({ message: "you need to log in to perform this action" });
 
-        const decoded=jwt.verify(token,process.env.JWT_secret);
-        req.userId=decoded.id;
+        const decoded = jwt.verify(token, process.env.JWT_secret);
+        req.userId = decoded.id;
         next();
 
     }
-    catch(error){
-            return res.status(500).json({message:error});
+    catch (error) {
+        return res.status(500).json({ message: error });
 
     }
 }

@@ -32,13 +32,13 @@ const SingleProduct = () => {
   async function addToCart(productId) {
     if (!isLoggedIn) {
       console.log("u are not logged in")
-      navigate("/login")
+      navigate("/login?nextPage=/product/" + slug)
     } else {
-      const response=await instance.post("cart/add",
-        {productId:productId,quantity:1},
-        {withCredentials:true}
-      );
-        navigate("/cart")
+      console.log("cart")
+      const response = await instance.post("cart/add",
+        { productId: productId, quantity: 1 },
+        { withCredentials: true });
+      navigate("/cart")
       console.log(response)
     }
   }
@@ -99,7 +99,7 @@ const SingleProduct = () => {
             {/* Button */}
 
             <button
-              onClick={()=>addToCart(product._id)}
+              onClick={() => addToCart(product._id)}
               className="mt-6 w-[150px] rounded-sm p-4 border border-black hover:bg-black hover:text-white transition"
             >
               Add to Cart

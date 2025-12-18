@@ -29,6 +29,14 @@ const router = createBrowserRouter([
         element: <Register />
       },
       {
+        path:"/product/:slug",
+        element:<SingleProduct />
+      },
+      {
+        path:"/cart",
+        element:<Cart />
+      },
+      {
         path:"admin/login",
         element:<AdminLogin />
       },
@@ -43,14 +51,6 @@ const router = createBrowserRouter([
       {
         path:"/admin/add-products",
         element:<AddProducts />
-      },
-      {
-        path:"/product/:slug",
-        element:<SingleProduct />
-      },
-      {
-        path:"/cart",
-        element:<Cart />
       },
     ]
   }

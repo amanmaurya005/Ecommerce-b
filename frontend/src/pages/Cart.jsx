@@ -10,7 +10,10 @@ const Cart = () => {
   // Fetch cart from backend
   async function getCart() {
     try {
-      const res = await instance.get("/cart"); 
+      console.log("first")
+      const res = await instance.get("/cart/data");
+      console.log("first");
+      console.log(res.data);
       setCartItems(res.data);
       setLoading(false);
     } catch (error) {
@@ -19,7 +22,7 @@ const Cart = () => {
     }
   }
 
-  // Remove item
+  //  Remove item
   async function removeItem(id) {
     try {
       await instance.delete(`/cart/${id}`);
@@ -31,7 +34,7 @@ const Cart = () => {
 
   useEffect(() => {
     getCart();
-  }, []);
+  }, [cartItems]);
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -53,7 +56,7 @@ const Cart = () => {
           <p className="text-gray-500">
             Your cart is empty.{" "}
             <Link to="/" className="underline">
-             <span> Continue shopping</span>
+              <span> Continue shopping</span>
             </Link>
           </p>
         ) : (
@@ -68,7 +71,7 @@ const Cart = () => {
                 >
                   {/* Image */}
                   <img
-                    src={`http://localhost:3000/${item.image}`}
+                    src={`http://localhost:3000/${item.productId.image}`}
                     alt={item.name}
                     className="w-28 h-28 object-contain"
                   />
@@ -85,15 +88,16 @@ const Cart = () => {
 
                     <div className="flex items-center gap-2 text-base font-medium">
                       <PiCurrencyInrLight />
-                      {item.price}
+                      
+                      {item.productId.originalPrice}
                     </div>
 
-                    <button
+                    {/* <button
                       onClick={() => removeItem(item._id)}
                       className="text-sm text-red-500 mt-2 w-fit"
                     >
                       Remove
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               ))}
