@@ -11,7 +11,7 @@ const Cart = () => {
   async function getCart() {
     try {
       console.log("first")
-      const res = await instance.get("/cart/data");
+      const res = await instance.get("/cart/");
       console.log("first");
       console.log(res.data);
       setCartItems(res.data);
@@ -23,18 +23,18 @@ const Cart = () => {
   }
 
   //  Remove item
-  async function removeItem(id) {
-    try {
-      await instance.delete(`/cart/${id}`);
-      setCartItems(cartItems.filter((item) => item._id !== id));
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function removeItem(id) {
+  //   try {
+  //     await instance.delete(`/cart/${id}`);
+  //     setCartItems(cartItems.filter((item) => item._id !== id));
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   useEffect(() => {
     getCart();
-  }, [cartItems]);
+  },[]);
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -77,20 +77,16 @@ const Cart = () => {
                   />
 
                   {/* Info */}
-                  <div className="flex-1 flex flex-col gap-2">
-                    <h2 className="text-lg font-medium text-gray-900">
-                      {item.name}
+                  <div className="flex flex-col gap-2">
+                    <h2 className="text-lg font-medium">
+                      {item.productId.name}
                     </h2>
 
                     <span className="text-sm text-gray-400">
                       Qty: {item.quantity}
                     </span>
 
-                    <div className="flex items-center gap-2 text-base font-medium">
-                      <PiCurrencyInrLight />
-                      
-                      {item.productId.originalPrice}
-                    </div>
+                   
 
                     {/* <button
                       onClick={() => removeItem(item._id)}
@@ -99,6 +95,11 @@ const Cart = () => {
                       Remove
                     </button> */}
                   </div>
+                   <div className="flex items-center gap-2 text-base font-medium">
+                      <PiCurrencyInrLight />
+                      
+                      {item.productId.originalPrice}
+                    </div>
                 </div>
               ))}
             </div>
