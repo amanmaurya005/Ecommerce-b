@@ -9,6 +9,7 @@ import productRouter from "./routes/productRouter.js";
 import checkRouter from "./routes/check.js";
 import cartRouter from "./routes/cart.js";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
 
 const app = express();
 app.use(express.json());
@@ -16,14 +17,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 await connectToDB();
-
+const frontendUrl = process.env.FRONTEND_URL;
 
 app.use("/uploads", express.static("uploads"));
 
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: frontendUrl,
         credentials: true,
     }));
 
