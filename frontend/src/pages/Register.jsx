@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
+import instance from "../axiosConfig";
 
 function Register() {
   const [data, setData] = useState({
@@ -24,8 +25,8 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/user/register",
+      const response = await instance.post(
+        "/user/register",
         data,
         {
           headers: {
