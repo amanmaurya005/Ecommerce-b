@@ -40,7 +40,7 @@ export async function loginUser(req, res) {
             role: UserExist.role,
         },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "3h" }
         );
 
         res.cookie("auth_token", auth_token, {
