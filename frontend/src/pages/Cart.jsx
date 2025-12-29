@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import instance from "../axiosConfig";
 import { PiCurrencyInrLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const {cartItems, setCartItems}= useCart();
   const [loading, setLoading] = useState(true);
-
+console.log(cartItems)
   // Fetch cart from backend
   async function getCart() {
     try {
@@ -22,22 +23,29 @@ const Cart = () => {
     }
   }
 
+  count="";
+  function decrease(user){
+  if(user){
+    
+  }
+  }
+
   //  Remove item
-  // async function removeItem(id) {
-  //   try {
-  //     await instance.delete(`/cart/${id}`);
-  //     setCartItems(cartItems.filter((item) => item._id !== id));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  async function removeItem(id) {
+    try {
+      await instance.delete(`/cart/${id}`);
+      setCartItems(cartItems.filter((item) => item._id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     getCart();
   },[]);
 
   const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.productId.discountedPrice * item.quantity,
     0
   );
 
@@ -86,20 +94,25 @@ const Cart = () => {
                       Qty: {item.quantity}
                     </span>
 
-                   
+                  </div>
 
-                    {/* <button
+                   <div className="quantity flex items-center">
+                    <span onClick={decrease(item)}>-</span>
+                    <span></span>
+                    <span>+</span>
+                  </div>
+                 
+                   <div className="flex items-center gap-2 text-base font-medium">
+                      <PiCurrencyInrLight />
+                      
+                      {item.productId.discountedPrice*item.quantity}
+                    </div>
+                     <button
                       onClick={() => removeItem(item._id)}
                       className="text-sm text-red-500 mt-2 w-fit"
                     >
                       Remove
-                    </button> */}
-                  </div>
-                   <div className="flex items-center gap-2 text-base font-medium">
-                      <PiCurrencyInrLight />
-                      
-                      {item.productId.originalPrice}
-                    </div>
+                    </button>
                 </div>
               ))}
             </div>

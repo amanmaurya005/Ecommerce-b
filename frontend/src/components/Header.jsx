@@ -5,11 +5,13 @@ import { FaShoppingCart, FaUser, FaSearch } from "react-icons/fa";
 import "../App.css";
 import instance from "../axiosConfig";
 import { useAuth } from "../contexts/AuthProvider";
+import { useCart } from "../contexts/CartContext";
 
 
 function Header() {
   const navigate = useNavigate();
   const { isLoggedIn, handleLogout } = useAuth()
+  const {cartItems ,setCartItems}=useCart()
 
   async function logoutUser() {
     let response = await instance.post("/user/logout");
@@ -31,7 +33,7 @@ function Header() {
         </Link>
 
         <Link to="/cart" className="icon">
-          <FaShoppingCart /> <span>Cart</span>
+          <FaShoppingCart /> <span>Cart ({cartItems.length})</span>
         </Link>
 
         {isLoggedIn ?

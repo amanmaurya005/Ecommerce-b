@@ -10,6 +10,7 @@ import AdminProducts from "./Admin/pages/AdminProduct.jsx"
 import AddProducts from "./Admin/pages/AddProduct.jsx";
 import SingleProduct from "./pages/SingleProduct.jsx";
 import Cart from "./pages/Cart.jsx";
+import CartProvider from "./contexts/CartContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthProvider>
+      <CartProvider>
       <RouterProvider router={router} />
+      </CartProvider>
     </AuthProvider>
   );
 }
