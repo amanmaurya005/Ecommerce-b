@@ -25,6 +25,7 @@ app.use("/uploads", express.static("uploads"));
 app.use(
     cors({
         origin: frontendUrl,
+        methods: [GET, PUT, POST, DELETE],
         credentials: true,
     }));
 
