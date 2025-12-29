@@ -23,12 +23,12 @@ console.log(cartItems)
     }
   }
 
-  count="";
-  function decrease(user){
-  if(user){
-    
-  }
-  }
+  // count="";
+  // function decrease(user){
+  // if(user){
+
+  // }
+  // }
 
   //  Remove item
   async function removeItem(id) {
@@ -96,11 +96,11 @@ console.log(cartItems)
 
                   </div>
 
-                   <div className="quantity flex items-center">
+                   {/* <div className="quantity flex items-center">
                     <span onClick={decrease(item)}>-</span>
                     <span></span>
                     <span>+</span>
-                  </div>
+                  </div> */}
                  
                    <div className="flex items-center gap-2 text-base font-medium">
                       <PiCurrencyInrLight />
