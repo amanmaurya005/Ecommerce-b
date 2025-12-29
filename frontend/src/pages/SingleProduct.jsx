@@ -4,6 +4,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { PiCurrencyInrLight } from "react-icons/pi";
 import { useAuth } from "../contexts/AuthProvider";
 
+
+const BASEURL = import.meta.env.VITE_BASEURL;
+
 const SingleProduct = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
@@ -52,7 +55,7 @@ const SingleProduct = () => {
           {/* Image */}
           <div className="bg-white h-full p-12 rounded-xl shadow-sm flex items-center justify-center">
             <img
-              src={`http://localhost:3000/${product.image}`}
+              src={`${BASEURL}/${product.image}`}
               alt={product.name}
               className="w-full max-w-md object-contain translate-y-1"
             />

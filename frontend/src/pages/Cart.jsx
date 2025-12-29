@@ -8,6 +8,9 @@ const Cart = () => {
   const {cartItems, setCartItems}= useCart();
   const [loading, setLoading] = useState(true);
 console.log(cartItems)
+
+const BASEURL = import.meta.env.VITE_BASEURL;
+
   // Fetch cart from backend
   async function getCart() {
     try {
@@ -79,7 +82,7 @@ console.log(cartItems)
                 >
                   {/* Image */}
                   <img
-                    src={`http://localhost:3000/${item.productId.image}`}
+                    src={`${BASEURL}/${item.productId.image}`}
                     alt={item.name}
                     className="w-28 h-28 object-contain"
                   />

@@ -2,6 +2,9 @@ import { PiCurrencyInrLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 function ProductCard ({product,slug}) {
+
+  const BASEURL = import.meta.env.VITE_BASEURL;
+
     return (
     <div className="w-full max-w-[230px] rounded-xl p-2 bg-white shadow-md hover:shadow-xl transition-all duration-300">
   
@@ -9,7 +12,7 @@ function ProductCard ({product,slug}) {
   <div className="h-48 w-full overflow-hidden flex items-center justify-center rounded-t-xl bg-gray-50 p-4">
    <Link to={`/product/${slug}`}>
     <img
-      src={`http://localhost:3000/${product.image}`}
+      src={`${BASEURL}/${product.image}`}
       alt={product.name}
       className="h-full object-contain transition-transform duration-300 hover:scale-105"
     />
