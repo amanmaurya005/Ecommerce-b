@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import "../App.css"
 import { useAuth } from '../contexts/AuthProvider'
+import instance from '../axiosConfig'
 
 
 function Login() {
@@ -26,8 +27,8 @@ function Login() {
 
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/user/login", data,
+      const response = await instance.post(
+        "/user/login", data,
         { withCredentials: true }
       )
 
