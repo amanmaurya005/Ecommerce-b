@@ -12,6 +12,10 @@ const Cart = () => {
 
   const BASEURL = import.meta.env.VITE_BASEURL;
 
+  useEffect(()=>{
+    getCart()
+  },[getCart]);
+
   // Fetch cart from backend
   async function getCart() {
     try {
