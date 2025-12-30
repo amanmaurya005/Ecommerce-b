@@ -10,11 +10,13 @@ import { useCart } from "../contexts/CartContext";
 
 function Header() {
   const navigate = useNavigate();
-  const { isLoggedIn, handleLogout } = useAuth()
+  const { isLoggedIn, handleLogout , setLoggedIn } = useAuth()
   const {cartItems ,setCartItems}=useCart()
 
   async function logoutUser() {
-    let response = await instance.post("/user/logout");
+    let response = await instance.post("/user/logout",{},
+      {withCredentials:true});
+      setLoggedIn(false)
     console.log(response)
     console.log(response.data.message)
     navigate("/login")
