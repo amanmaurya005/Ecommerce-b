@@ -16,7 +16,7 @@ function Header() {
   async function logoutUser() {
     let response = await instance.post("/user/logout",{},
       {withCredentials:true});
-      setLoggedIn(false)
+      
     console.log(response)
     console.log(response.data.message)
     navigate("/login")
