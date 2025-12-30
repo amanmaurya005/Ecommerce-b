@@ -61,13 +61,13 @@ export async function loginUser(req, res) {
 }
 export async function logoutUser(req, res) {
     try {
-        res.clearCookie("auth_token", ""), {
+        res.clearCookie("auth_token", {
             httpOnly: true,
             secure: true,
             sameSite: "none",
              // any negative time
 
-        };
+        });
         return res.status(200).json({ message: "user Logged out" });
 
     }
