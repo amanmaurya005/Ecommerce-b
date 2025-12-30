@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 
 const Cart = () => {
-  const {cartItems, setCartItems}= useCart();
+  const { cartItems, setCartItems } = useCart();
   const [loading, setLoading] = useState(true);
-console.log(cartItems)
+  const [UpdatingId,setUpdatingId]=useState(null)
+  console.log(cartItems)
 
-const BASEURL = import.meta.env.VITE_BASEURL;
+  const BASEURL = import.meta.env.VITE_BASEURL;
 
   // Fetch cart from backend
   async function getCart() {
@@ -26,14 +27,18 @@ const BASEURL = import.meta.env.VITE_BASEURL;
     }
   }
 
-  // count="";
-  // function decrease(user){
-  // if(user){
+ async function updateQty(id, action) {
+    try {
+      setUpdatingId(id);
+      const res = await instance.patch(`/cart/quantity/${id}`, { action });
+      setCartItems(res.data);
+    } catch (error) {
+      console.error("Failed to update quantity", error);
+    } finally {
+      setUpdatingId(null);
+    }
+  }
 
-  // }
-  // }
-
-  //  Remove item
   async function removeItem(id) {
     try {
       await instance.delete(`/cart/${id}`);
@@ -45,7 +50,7 @@ const BASEURL = import.meta.env.VITE_BASEURL;
 
   useEffect(() => {
     getCart();
-  },[]);
+  }, []);
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.productId.discountedPrice * item.quantity,
@@ -99,23 +104,38 @@ const BASEURL = import.meta.env.VITE_BASEURL;
 
                   </div>
 
-                   {/* <div className="quantity flex items-center">
-                    <span onClick={decrease(item)}>-</span>
-                    <span></span>
-                    <span>+</span>
-                  </div> */}
-                 
-                   <div className="flex items-center gap-2 text-base font-medium">
-                      <PiCurrencyInrLight />
-                      
-                      {item.productId.discountedPrice*item.quantity}
-                    </div>
-                     <button
-                      onClick={() => removeItem(item._id)}
-                      className="text-sm text-red-500 mt-2 w-fit"
+                  <div className="flex items-center  gap-3 border h-12 rounded">
+                    <button
+                      onClick={() => updateQty(item._id, "dec")}
+                      className="text-lg font-bold"
                     >
-                      Remove
+                      −
                     </button>
+
+                    <span className="min-w-[20px] text-center">
+                      {item.quantity}
+                    </span>
+
+                    <button
+                      onClick={() => updateQty(item._id, "inc")}
+                      className="text-lg font-bold"
+                    >
+                      +
+                    </button>
+                  </div>
+
+
+                  <div className="flex items-center gap-2 text-base font-medium">
+                    <PiCurrencyInrLight />
+
+                    {item.productId.discountedPrice * item.quantity}
+                  </div>
+                  <button
+                    onClick={() => removeItem(item._id)}
+                    className="text-sm text-red-500 mt-2 w-fit"
+                  >
+                    Remove
+                  </button>
                 </div>
               ))}
             </div>
