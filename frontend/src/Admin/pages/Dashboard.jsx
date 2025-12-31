@@ -14,6 +14,7 @@ function AdminDashboard() {
           <li><Link to="/admin/dashboard">Dashboard</Link></li>
           <li><Link to="/admin/products">Manage Products</Link></li>
           <li><Link to="/admin/add-products">Add Products</Link></li>
+          <li><Link to="/admin/createCoupon">Create Coupon</Link></li>
         </ul>
 
         <button className="logout-btn">Logout</button>

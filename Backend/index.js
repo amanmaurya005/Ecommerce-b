@@ -9,6 +9,7 @@ import productRouter from "./routes/productRouter.js";
 import checkRouter from "./routes/check.js";
 import cartRouter from "./routes/cart.js";
 import cookieParser from "cookie-parser";
+import couponRouter from "./routes/coupon.js"
 import "dotenv/config";
 
 const app = express();
@@ -36,5 +37,7 @@ app.use("/admin", adminRouter);
 app.use("/product", productRouter);
 app.use("/check", checkRouter);
 app.use("/cart", cartRouter);
+app.use("/coupon", couponRouter);
+
 
 app.listen(3000, () => console.log("Server started at port 3000"));

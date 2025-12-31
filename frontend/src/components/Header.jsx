@@ -13,6 +13,9 @@ function Header() {
   const { isLoggedIn, handleLogout , setLoggedIn } = useAuth()
   const {cartItems ,setCartItems}=useCart()
 
+
+console.log(cartItems);
+
   async function logoutUser() {
     let response = await instance.post("/user/logout",{},
       {withCredentials:true});

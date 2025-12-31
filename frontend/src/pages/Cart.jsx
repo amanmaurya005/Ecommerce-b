@@ -5,33 +5,40 @@ import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 
 const Cart = () => {
-  const { cartItems, setCartItems } = useCart();
-  const [loading, setLoading] = useState(true);
-  const [UpdatingId,setUpdatingId]=useState(null)
-  console.log(cartItems)
+  const { cartItems, setCartItems, getCart, loading } = useCart();
+  const [UpdatingId, setUpdatingId] = useState(null);
 
   const BASEURL = import.meta.env.VITE_BASEURL;
 
-  useEffect(()=>{
-    getCart()
-  },[getCart]);
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
 
-  // Fetch cart from backend
-  async function getCart() {
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  // Reset coupon when cart changes
+  useEffect(() => {
+    setDiscount(0);
+    setCouponCode("");
+  }, [cartItems]);
+
+  async function applyCoupon() {
     try {
-      console.log("first")
-      const res = await instance.get("/cart/");
-      console.log("first");
-      console.log(res.data);
-      setCartItems(res.data);
-      setLoading(false);
+      const res = await instance.post("/coupon/apply", {
+        code: couponCode,
+        cartTotal: totalPrice,
+      });
+
+      setDiscount(res.data.discount);
+      alert("Coupon applied successfully");
     } catch (error) {
-      console.error(error);
-      setLoading(false);
+      alert(error.response?.data?.message || "Invalid coupon");
     }
   }
 
- async function updateQty(id, action) {
+  async function updateQty(id, action) {
     try {
       setUpdatingId(id);
       const res = await instance.patch(`/cart/quantity/${id}`, { action });
@@ -52,12 +59,9 @@ const Cart = () => {
     }
   }
 
-  useEffect(() => {
-    getCart();
-  }, []);
-
   const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.productId.discountedPrice * item.quantity,
+    (acc, item) =>
+      acc + item.productId.discountedPrice * item.quantity,
     0
   );
 
@@ -76,7 +80,7 @@ const Cart = () => {
           <p className="text-gray-500">
             Your cart is empty.{" "}
             <Link to="/" className="underline">
-              <span> Continue shopping</span>
+              <span>Continue shopping</span>
             </Link>
           </p>
         ) : (
@@ -92,12 +96,12 @@ const Cart = () => {
                   {/* Image */}
                   <img
                     src={`${BASEURL}/${item.productId.image}`}
-                    alt={item.name}
+                    alt={item.productId.name}
                     className="w-28 h-28 object-contain"
                   />
 
                   {/* Info */}
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 flex-1">
                     <h2 className="text-lg font-medium">
                       {item.productId.name}
                     </h2>
@@ -106,10 +110,18 @@ const Cart = () => {
                       Qty: {item.quantity}
                     </span>
 
+                    <button
+                      onClick={() => removeItem(item._id)}
+                      className="text-sm text-red-500 w-fit"
+                    >
+                      Remove
+                    </button>
                   </div>
 
-                  <div className="flex items-center  gap-3 border h-12 rounded">
+                  {/* Quantity */}
+                  <div className="flex items-center gap-3 border h-12 rounded px-3">
                     <button
+                      disabled={UpdatingId === item._id}
                       onClick={() => updateQty(item._id, "dec")}
                       className="text-lg font-bold"
                     >
@@ -121,6 +133,7 @@ const Cart = () => {
                     </span>
 
                     <button
+                      disabled={UpdatingId === item._id}
                       onClick={() => updateQty(item._id, "inc")}
                       className="text-lg font-bold"
                     >
@@ -128,23 +141,16 @@ const Cart = () => {
                     </button>
                   </div>
 
-
+                  {/* Price */}
                   <div className="flex items-center gap-2 text-base font-medium">
                     <PiCurrencyInrLight />
-
                     {item.productId.discountedPrice * item.quantity}
                   </div>
-                  <button
-                    onClick={() => removeItem(item._id)}
-                    className="text-sm text-red-500 mt-2 w-fit"
-                  >
-                    Remove
-                  </button>
                 </div>
               ))}
             </div>
 
-            {/* Summary */}
+            {/* Order Summary */}
             <div className="bg-white rounded-xl p-8 shadow-sm h-fit">
               <h2 className="text-xl font-medium mb-6">
                 Order Summary
@@ -155,11 +161,52 @@ const Cart = () => {
                 <span>{cartItems.length}</span>
               </div>
 
-              <div className="flex justify-between text-lg font-semibold mb-6">
+              <div className="flex justify-between text-lg font-semibold mb-4">
                 <span>Total Price</span>
                 <span className="flex items-center gap-1">
                   <PiCurrencyInrLight />
                   {totalPrice}
+                </span>
+              </div>
+
+              {/* Coupon */}
+              <div className="mb-6">
+                <label className="text-sm font-medium text-gray-700">
+                  Apply Coupon
+                </label>
+
+                <div className="flex gap-2 mt-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    placeholder="Enter coupon code"
+                    className="flex-1 border px-3 py-2 rounded focus:outline-none"
+                  />
+
+                  <button
+                    onClick={applyCoupon}
+                    className="bg-green-600 text-white px-4 rounded hover:bg-green-700"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+
+              {discount > 0 && (
+                <div className="flex justify-between mb-4 text-green-600 font-medium">
+                  <span>Coupon Discount</span>
+                  <span className="flex items-center gap-1">
+                    - <PiCurrencyInrLight /> {discount}
+                  </span>
+                </div>
+              )}
+
+              <div className="flex justify-between text-lg font-semibold mb-6">
+                <span>Final Amount</span>
+                <span className="flex items-center gap-1">
+                  <PiCurrencyInrLight />
+                  {totalPrice - discount}
                 </span>
               </div>
 

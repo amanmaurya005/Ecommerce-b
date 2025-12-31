@@ -47,7 +47,7 @@ export async function loginUser(req, res) {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 3600*1000,
+            maxAge: 3600 * 1000,
         });
 
         return res.status(200).json({ message: "LogedIn" });
@@ -65,7 +65,7 @@ export async function logoutUser(req, res) {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-             // any negative time
+            // any negative time
 
         });
         return res.status(200).json({ message: "user Logged out" });

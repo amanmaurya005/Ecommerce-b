@@ -11,6 +11,7 @@ import AddProducts from "./Admin/pages/AddProduct.jsx";
 import SingleProduct from "./pages/SingleProduct.jsx";
 import Cart from "./pages/Cart.jsx";
 import CartProvider from "./contexts/CartContext.jsx";
+import CreateCoupon from "./Admin/pages/CreateCoupon.jsx";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path:"/admin/add-products",
         element:<AddProducts />
+      },
+      {
+        path:"/admin/createCoupon",
+        element:<CreateCoupon />
       },
     ]
   }

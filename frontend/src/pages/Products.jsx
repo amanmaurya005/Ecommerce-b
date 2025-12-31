@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
 import instance from "../axiosConfig.js";
+import { useCart } from "../contexts/CartContext.jsx";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {getCart}=useCart();
+
+  useEffect(()=>{
+    getCart();
+  },[])
 
   useEffect(() => {
     getProducts();

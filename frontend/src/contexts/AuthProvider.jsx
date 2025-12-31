@@ -27,6 +27,8 @@ function AuthProvider({ children }) {
         if (response.status === 200) {
             window.location.href = "/";
         }
+        setIsLoggedIn(false);
+  setCartItems([]);
     }
 
     return (

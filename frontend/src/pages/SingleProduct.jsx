@@ -41,8 +41,8 @@ const SingleProduct = () => {
       const response = await instance.post("cart/add",
         { productId: productId, quantity: 1 },
         { withCredentials: true });
+      console.log(response.data.product);
       navigate("/cart")
-      console.log(response)
     }
   }
 
