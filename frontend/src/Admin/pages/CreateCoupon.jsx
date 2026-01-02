@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import instance from "../../axiosConfig";
 
 export default function CreateCoupon() {
   const [coupon, setCoupon] = useState({
@@ -20,14 +22,23 @@ export default function CreateCoupon() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const res = await instance.post("/coupon", coupon, { withCredentials: true });
+
+    // 👇 THIS IS THE KEY
+    const createdId = res.data._id;
+
+    // navigate to edit page
+    navigate(`/admin/editCoupon/${createdId}`);
+
+
     if (!coupon.code || !coupon.discountValue || !coupon.expiryDate) {
       alert("Please fill all required fields");
       return;
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:3000/coupon",
+      const res = await instance.post(
+        "/coupon",
         coupon,
         { withCredentials: true }
       );
@@ -42,11 +53,14 @@ export default function CreateCoupon() {
   return (
     <section className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8">
-        
+
         {/* Heading */}
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Create New Coupon
         </h2>
+
+
+        <Link to="/admin/couponList">Coupon List</Link>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">

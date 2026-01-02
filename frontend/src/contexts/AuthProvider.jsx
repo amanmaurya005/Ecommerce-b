@@ -32,7 +32,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <authContext.Provider value={{ isLoggedIn, loggedinUser, checkIsLoggedIn, handleLogout }}>
+        <authContext.Provider value={{ isLoggedIn,setIsLoggedIn, loggedinUser, checkIsLoggedIn, handleLogout }}>
             {children}
         </authContext.Provider>
     )

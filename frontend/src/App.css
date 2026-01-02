@@ -216,6 +216,9 @@ button[type="submit"] {
     font-weight: 600;
     transition: 0.3s;
 }
+.regBtn{
+    margin-bottom: 10px;
+}
 
 button[type="submit"]:hover {
     background: var(--hoverColor);

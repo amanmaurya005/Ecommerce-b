@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import "../App.css"
 import { useAuth } from '../contexts/AuthProvider'
 import instance from '../axiosConfig'
+import { GoogleLogin } from "@react-oauth/google";
+
 
 
 function Login() {
@@ -22,9 +24,27 @@ function Login() {
 
   }
 
+  async function handleGoogleSuccess(credentialResponse) {
+        try {
+          await instance.post("/user/google-login", {
+            token: credentialResponse.credential,
+          });
+    
+          alert("Google login successful");
+          setIsLoggedIn(true);
+          navigate("/");
+        } catch (error) {
+          console.error(error);
+          alert("Google login failed");
+        }
+      }
+    
+      function handleGoogleError() {
+        alert("Google Login Failed");
+      }
+
   async function handleSubmit(e) {
     e.preventDefault()
-
 
     try {
       const response = await instance.post(
@@ -69,6 +89,14 @@ function Login() {
         </div>
 
         <button type='submit'>login</button> <br />
+
+       <div className="text-center  w-3xs"> 
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+        />
+      </div>
+
         <span id='reg' > register if you not have account <Link to="/register"> <span>register</span>  </Link></span>
       </form>
 

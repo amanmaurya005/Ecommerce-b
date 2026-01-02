@@ -1,14 +1,18 @@
 import { Schema, model } from "mongoose";
 
 const authSchema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true },
-    username: { type: String, required: true, unique: true, min: 4, max: 30 },
-    phone: { type: Number, required: true, unique: true },
-    password: { type: String, required: true, min: 8, max: 60 },
+    username: { type: String, unique: true, sparse: true, min: 4, max: 30 },
+    phone: { type: Number,  sparse: true, unique: true },
+    password: { type: String,  min: 8, max: 60 }, //[select: false] for not showing password in queries
+    googleId: { type: String, unique: true, sparse: true },
     image: { type: String },
+    authProvider: { type: String, enum: ["local", "google"], default: "local", },
     role: { type: String }
-})
+},
+  { timestamps: true }
+);
 
 const Auth = model("auth", authSchema, "auth");
 export default Auth;

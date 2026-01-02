@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import instance from "../axiosConfig";
 
+
+
 function Register() {
   const [data, setData] = useState({
     name: "",
@@ -11,8 +13,11 @@ function Register() {
     username: "",
     email: "",
     password: "",
-    role:"",
+    role: "",
   });
+
+  
+  
 
   const navigate = useNavigate();
 
@@ -20,6 +25,8 @@ function Register() {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   }
+
+   
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -36,10 +43,10 @@ function Register() {
       );
 
       console.log("User Registered:", response.data);
-      
-        alert("User registration successful!");
-        navigate("/login");
-    
+
+      alert("User registration successful!");
+      navigate("/login");
+
     } catch (error) {
       console.error("Registration Error:", error);
 
@@ -117,10 +124,16 @@ function Register() {
           />
         </div>
 
-       
 
-        <button type="submit">Register</button>
+      <div>
+        <button className="regBtn" type="submit">Register</button> 
+        
+      </div>
+
       </form>
+
+     
+
 
       <p>
         Already have an account? <Link to="/login">Login</Link>
