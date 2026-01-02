@@ -23,6 +23,17 @@ function Register() {
 
   function handleChange(e) {
     const { name, value } = e.target;
+
+      if (name === "name") {
+    if (!/^[a-zA-Z\s]*$/.test(value)) return;
+  }
+
+  // Phone: allow only numbers & max 10 digits
+  if (name === "phone") {
+    if (!/^\d*$/.test(value)) return;
+    if (value.length > 10) return;
+  }
+
     setData({ ...data, [name]: value });
   }
 
@@ -30,6 +41,14 @@ function Register() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+      const passwordRegex = /(?=.*\d)(?=.*[@]).+$/;
+
+     if (!passwordRegex.test(data.password)) {
+    alert(
+      "Password must contain at least:\n• 1 number\n• @ symbol"
+    );
+    return;
+  }
 
     try {
       const response = await instance.post(
@@ -82,6 +101,8 @@ function Register() {
             type="tel"
             placeholder="Enter phone number"
             name="phone"
+            maxLength={10}
+  inputMode="numeric"
             value={data.phone}
             onChange={handleChange}
             required

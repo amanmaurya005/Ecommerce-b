@@ -14,6 +14,7 @@ import CartProvider from "./contexts/CartContext.jsx";
 import CreateCoupon from "./Admin/pages/CreateCoupon.jsx";
 import CouponList from "./Admin/pages/CouponList.jsx"
 import EditCoupon from "./Admin/pages/EditCoupon.jsx"
+import UserList from "./Admin/pages/UserList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -65,8 +66,12 @@ const router = createBrowserRouter([
         element:<CouponList />
       },
       {
-        path:"/admin/editCoupon",
+        path:"/admin/editCoupon/:id",
         element:<EditCoupon />
+      },
+      {
+        path:"/admin/userList",
+        element:<UserList />
       },
     ]
   }

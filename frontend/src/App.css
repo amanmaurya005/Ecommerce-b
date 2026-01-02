@@ -1,7 +1,7 @@
 /* GLOBAL RESET */
 * {
-    margin: 0;
-    padding: 0;
+    /* margin: 0;
+    padding: 0; */
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
@@ -91,7 +91,6 @@
     background: var(--mainColor);
     color: white;
     padding: 30px 20px;
-    margin-top: 70px;
     text-align: center;
     border-radius: 12px 12px 0 0;
 }

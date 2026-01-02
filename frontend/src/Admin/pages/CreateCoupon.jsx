@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import instance from "../../axiosConfig";
+import CouponList from "./CouponList";
+import { useCoupon } from "../context/CouponContext";
 
 export default function CreateCoupon() {
   const [coupon, setCoupon] = useState({
@@ -14,6 +16,12 @@ export default function CreateCoupon() {
     status: "active",
   });
 
+  const {fetchCoupons}=useCoupon();
+
+  useEffect(()=>{
+    fetchCoupons()
+  },[])
+
   function handleChange(e) {
     const { name, value } = e.target;
     setCoupon({ ...coupon, [name]: value });
@@ -24,7 +32,7 @@ export default function CreateCoupon() {
 
     const res = await instance.post("/coupon", coupon, { withCredentials: true });
 
-    // 👇 THIS IS THE KEY
+    // THIS IS THE KEY
     const createdId = res.data._id;
 
     // navigate to edit page
@@ -51,16 +59,14 @@ export default function CreateCoupon() {
   }
 
   return (
+    <>
     <section className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8">
+      <div className=" mx-auto bg-white rounded-xl shadow-md p-8">
 
         {/* Heading */}
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Create New Coupon
         </h2>
-
-
-        <Link to="/admin/couponList">Coupon List</Link>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -182,5 +188,8 @@ export default function CreateCoupon() {
         </form>
       </div>
     </section>
+
+    <CouponList />
+    </>
   );
 }

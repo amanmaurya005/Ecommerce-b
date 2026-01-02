@@ -22,7 +22,7 @@ export default function EditCoupon() {
     e.preventDefault();
     await instance.put(`/coupon/${id}`, coupon);
     alert("Coupon updated");
-    navigate("/admin/coupons");
+    navigate("/admin/createCoupon");
   }
 
   useEffect(() => {
