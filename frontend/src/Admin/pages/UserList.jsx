@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
-import instance from "../../axiosConfig";
+import { useAuth } from "../../contexts/AuthProvider";
 
 function UserList() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  async function fetchUsers() {
-    try {
-      const res = await instance.get("/user");
-      setUsers(res.data);
-    } catch (error) {
-      console.error("Failed to load users", error);
-    } finally {
-      setLoading(false);
-    }
-  }
+ 
+  const {users,fetchUsers,loading}=useAuth()
 
   useEffect(() => {
     fetchUsers();

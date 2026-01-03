@@ -29,7 +29,7 @@ export async function loginAdmin(req, res) {
             role: AdminExist.role,
         },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "3h" }
         );
 
         res.cookie("admin_token", admin_token, {

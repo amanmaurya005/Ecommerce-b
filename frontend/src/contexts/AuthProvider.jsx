@@ -7,6 +7,22 @@ function AuthProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loggedinUser, setLoggedinUser] = useState(null)
 
+     const [users, setUsers] = useState([]);
+      const [loading, setLoading] = useState(true);
+    
+      async function fetchUsers() {
+        try {
+          const res = await instance.get("/user");
+          setUsers(res.data);
+        } catch (error) {
+          console.error("Failed to load users", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+      useEffect(() => {
+          fetchUsers();
+        }, []);
 
     useEffect(() => {
         checkIsLoggedIn();
@@ -32,7 +48,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <authContext.Provider value={{ isLoggedIn,setIsLoggedIn, loggedinUser, checkIsLoggedIn, handleLogout }}>
+        <authContext.Provider value={{ isLoggedIn,setIsLoggedIn, loggedinUser, checkIsLoggedIn, handleLogout,users,loading,fetchUsers, }}>
             {children}
         </authContext.Provider>
     )
