@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-// import "../App.css";
-import { Link } from "react-router-dom";
 import instance from "../../axiosConfig";
+import { toast } from "react-toastify";
+import EditProductModal from "./EditProductModal"; // ✅ NEW
+import { Link } from "react-router-dom";
 
 function AdminProduct() {
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null); // ✅ NEW
   const BASEURL = import.meta.env.VITE_BASEURL;
 
   async function fetchProducts() {
@@ -12,8 +14,19 @@ function AdminProduct() {
       const response = await instance.get("/product", { withCredentials: true });
       setProducts(response.data);
     } catch (error) {
-      console.error("Error loading products:", error);
-      alert("Failed to load products");
+      toast.error("Failed to load products");
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!window.confirm("Delete this product?")) return;
+
+    try {
+      await instance.delete(`/product/${id}`, { withCredentials: true });
+      toast.success("Product deleted");
+      fetchProducts();
+    } catch (error) {
+      toast.error("Delete failed");
     }
   }
 
@@ -21,28 +34,41 @@ function AdminProduct() {
     fetchProducts();
   }, []);
 
-return (
-    <div className="min-h-screen w-full bg-gray-50 px-6 py-8 ">
-      {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">
+  return (
+    <div className="min-h-screen w-full bg-gray-50 px-6 py-8">
+      {/* Header */}
+      <div className="mb-6 flex justify-between">
+       <div>
+         <h1 className="text-3xl font-bold text-gray-900">
           Product Control Center
         </h1>
         <p className="text-sm text-gray-500">
           Fast access to all products & operations
         </p>
+       </div>
+
+      
+          
+            <Link
+              to="/admin/add-products"
+              className="bg-gray-600 text-white w-30 py-3.5 px-2.5 rounded-lg font-medium hover:bg-gray-700 transition"
+            >
+              Add Products
+            </Link>
+        
+
       </div>
 
       {/* Product List */}
-      <div className="space-y-4 my-2">
+      <div className="space-y-4">
         {products.map((item) => (
           <div
             key={item._id}
-            className="flex items-center justify-between rounded-xl border border-gray-800 bg-white px-6 py-4"
+            className="flex items-center justify-between rounded-xl border bg-white px-6 py-4"
           >
-            {/* Left: Image + Details */}
+            {/* Left */}
             <div className="flex items-center gap-5">
-              <div className="h-20 w-20 flex-shrink-0">
+              <div className="h-20 w-20">
                 <img
                   src={`${BASEURL}/${item.image}`}
                   alt={item.name}
@@ -51,26 +77,51 @@ return (
               </div>
 
               <div>
-                <h3 className="text-base font-semibold text-gray-900">
-                  {item.name}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {item.description}
-                </p>
+                <h3 className="font-semibold">{item.name}</h3>
+                <p className="text-sm text-gray-500">{item.description}</p>
               </div>
-              
             </div>
 
-            {/* Right: Price */}
-            <div className="text-lg font-semibold text-green-600">
-              ₹{item.discountedPrice}
+            {/* Right */}
+            <div className="flex items-center gap-4">
+
+              <span className="text-sm text-gray-400 line-through">
+                ₹{item.originalPrice}
+              </span>
+
+              <span className="font-semibold text-green-600">
+                ₹{item.discountedPrice}
+              </span>
+
+
+              <button
+                onClick={() => setSelectedProduct(item)}
+                className="rounded-lg bg-blue-500 px-4 py-1.5 text-sm text-white hover:bg-blue-600"
+              >
+                Edit
+              </button>
+
+              <button
+                onClick={() => deleteProduct(item._id)}
+                className="rounded-lg bg-red-500 px-4 py-1.5 text-sm text-white hover:bg-red-600"
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* ✅ Edit Modal */}
+      {selectedProduct && (
+        <EditProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onUpdated={fetchProducts}
+        />
+      )}
     </div>
   );
 }
-
 
 export default AdminProduct;

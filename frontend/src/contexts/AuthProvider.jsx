@@ -6,6 +6,8 @@ const authContext = createContext();
 function AuthProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loggedinUser, setLoggedinUser] = useState(null)
+  const [showPassword, setShowPassword] = useState(false);
+
 
      const [users, setUsers] = useState([]);
       const [loading, setLoading] = useState(true);
@@ -48,7 +50,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <authContext.Provider value={{ isLoggedIn,setIsLoggedIn, loggedinUser, checkIsLoggedIn, handleLogout,users,loading,fetchUsers, }}>
+        <authContext.Provider value={{ isLoggedIn,setIsLoggedIn,showPassword,setShowPassword, loggedinUser, checkIsLoggedIn, handleLogout,users,loading,fetchUsers, }}>
             {children}
         </authContext.Provider>
     )

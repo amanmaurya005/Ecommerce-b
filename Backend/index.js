@@ -10,6 +10,7 @@ import checkRouter from "./routes/check.js";
 import cartRouter from "./routes/cart.js";
 import cookieParser from "cookie-parser";
 import couponRouter from "./routes/coupon.js"
+import githubUser from "./routes/githubUser.js"
 import "dotenv/config";
 
 const app = express();
@@ -38,6 +39,6 @@ app.use("/product", productRouter);
 app.use("/check", checkRouter);
 app.use("/cart", cartRouter);
 app.use("/coupon", couponRouter);
-
+// app.use("/user", githubUser);
 
 app.listen(3000, () => console.log("Server started at port 3000"));

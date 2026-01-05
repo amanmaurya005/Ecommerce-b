@@ -3,6 +3,7 @@ import instance from "../axiosConfig";
 import { PiCurrencyInrLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
+import { toast } from "react-toastify"; // ✅ added
 
 const Cart = () => {
   const { cartItems, setCartItems, getCart, loading } = useCart();
@@ -32,9 +33,9 @@ const Cart = () => {
       });
 
       setDiscount(res.data.discount);
-      alert("Coupon applied successfully");
+      toast.success("Coupon applied successfully");
     } catch (error) {
-      alert(error.response?.data?.message || "Invalid coupon");
+      toast.error(error.response?.data?.message || "Invalid coupon");
     }
   }
 

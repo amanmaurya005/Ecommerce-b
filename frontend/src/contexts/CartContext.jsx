@@ -1,33 +1,35 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import instance from "../axiosConfig";
+import { toast } from "react-toastify"; // added
 
 const CartContext = createContext();
 
 function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-  
-     useEffect(() => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
     getCart();
   }, []);
-    // Fetch cart from backend
+
+  // Fetch cart from backend
   async function getCart() {
     try {
-      // console.log("first")
       const res = await instance.get("/cart/");
-      // console.log("first");
       console.log(res.data);
       setCartItems(res.data);
       setLoading(false);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load cart"); // feedback
       setLoading(false);
     }
   }
 
-
   return (
-    <CartContext.Provider value={{ cartItems, setCartItems,getCart, loading,setLoading }}>
+    <CartContext.Provider
+      value={{ cartItems, setCartItems, getCart, loading, setLoading }}
+    >
       {children}
     </CartContext.Provider>
   );

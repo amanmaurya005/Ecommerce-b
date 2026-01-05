@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import instance from "../../axiosConfig";
 import CouponList from "./CouponList";
 import { useCoupon } from "../context/CouponContext";
+import { toast } from "react-toastify"; // ✅ added
 
 export default function CreateCoupon() {
   const [coupon, setCoupon] = useState({
@@ -16,53 +17,45 @@ export default function CreateCoupon() {
     status: "active",
   });
 
-  const {fetchCoupons}=useCoupon();
+  const { fetchCoupons } = useCoupon();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    fetchCoupons()
-  },[])
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setCoupon({ ...coupon, [name]: value });
+    setCoupon({
+      ...coupon,
+      [name]: name === "code" ? value.toUpperCase() : value
+    });
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+async function handleSubmit(e) {
+  e.preventDefault();
 
+  if (!coupon.code || !coupon.discountValue || !coupon.expiryDate) {
+    toast.error("Please fill all required fields");
+    return;
+  }
+
+  try {
     const res = await instance.post("/coupon", coupon, { withCredentials: true });
-
-    // THIS IS THE KEY
     const createdId = res.data._id;
-
-    // navigate to edit page
+    toast.success("Coupon created successfully");
+    console.log(res.data);
     navigate(`/admin/editCoupon/${createdId}`);
-
-
-    if (!coupon.code || !coupon.discountValue || !coupon.expiryDate) {
-      alert("Please fill all required fields");
-      return;
-    }
-
-    try {
-      const res = await instance.post(
-        "/coupon",
-        coupon,
-        { withCredentials: true }
-      );
-      alert("Coupon created successfully");
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("Failed to create coupon");
-    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to create coupon");
   }
+}
 
-  return (
-    <>
+return (
+  <>
     <section className="min-h-screen bg-gray-100 py-10 px-4">
       <div className=" mx-auto bg-white rounded-xl shadow-md p-8">
-
         {/* Heading */}
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Create New Coupon
@@ -70,7 +63,6 @@ export default function CreateCoupon() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-
           {/* Coupon Code */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -184,12 +176,11 @@ export default function CreateCoupon() {
           >
             Create Coupon
           </button>
-
         </form>
       </div>
     </section>
 
     <CouponList />
-    </>
+  </>
   );
 }
