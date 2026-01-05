@@ -3,31 +3,21 @@ import ProductCard from "../components/ProductCard.jsx";
 import instance from "../axiosConfig.js";
 import { useCart } from "../contexts/CartContext.jsx";
 import { toast } from "react-toastify"; // ✅ added
+import { useProduct } from "../contexts/ProductProvider.jsx";
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const {getProducts,products,loading}=useProduct();
   const { getCart } = useCart();
+  
+    useEffect(() => {
+      getProducts();
+    }, []);
 
   useEffect(() => {
     getCart();
   }, []);
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  async function getProducts() {
-    setLoading(true);
-    try {
-      const response = await instance.get("/product");
-      setProducts(response.data);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load products");
-    }
-    setLoading(false);
-  }
+  
 
   return (
     <section className="bg-gray-50 px-4 sm:px-8 lg:px-14 py-10">

@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthProvider";
 
 function AdminDashboard() {
+  const { users, fetchUsers } = useAuth();
+  const user = users.filter(user => user.role === "user");
+
+
   return (
     <div className="min-h-screen flex bg-gray-100">
 
@@ -72,23 +77,23 @@ function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-sm text-gray-500">Total Users</h3>
-            <p className="text-2xl font-bold text-gray-800 mt-2">120</p>
+            <p className="text-2xl font-bold text-gray-800 mt-2"  >{user.length}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-sm text-gray-500">Total Products</h3>
-            <p className="text-2xl font-bold text-gray-800 mt-2">56</p>
+            <p className="text-2xl font-bold text-gray-800 mt-2">-</p>
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-sm text-gray-500">Total Orders</h3>
-            <p className="text-2xl font-bold text-gray-800 mt-2">89</p>
+            <p className="text-2xl font-bold text-gray-800 mt-2">-</p>
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-sm text-gray-500">Revenue</h3>
             <p className="text-2xl font-bold text-green-600 mt-2">
-              ₹72,300
+             -
             </p>
           </div>
         </div>

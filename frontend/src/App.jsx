@@ -15,6 +15,7 @@ import CreateCoupon from "./Admin/pages/CreateCoupon.jsx";
 import CouponList from "./Admin/pages/CouponList.jsx"
 import EditCoupon from "./Admin/pages/EditCoupon.jsx"
 import UserList from "./Admin/pages/UserList.jsx";
+import ProductProvider from "./contexts/ProductProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,44 +35,44 @@ const router = createBrowserRouter([
         element: <Register />
       },
       {
-        path:"/product/:slug",
-        element:<SingleProduct />
+        path: "/product/:slug",
+        element: <SingleProduct />
       },
       {
-        path:"/cart",
-        element:<Cart />
+        path: "/cart",
+        element: <Cart />
       },
       {
-        path:"admin/login",
-        element:<AdminLogin />
+        path: "admin/login",
+        element: <AdminLogin />
       },
       {
-        path:"admin/dashboard",
-        element:<Dashboard />
+        path: "admin/dashboard",
+        element: <Dashboard />
       },
       {
-        path:"admin/products",
-        element:<AdminProducts />
+        path: "admin/products",
+        element: <AdminProducts />
       },
       {
-        path:"/admin/add-products",
-        element:<AddProducts />
+        path: "/admin/add-products",
+        element: <AddProducts />
       },
       {
-        path:"/admin/createCoupon",
-        element:<CreateCoupon />
+        path: "/admin/createCoupon",
+        element: <CreateCoupon />
       },
       {
-        path:"/admin/couponList",
-        element:<CouponList />
+        path: "/admin/couponList",
+        element: <CouponList />
       },
       {
-        path:"/admin/editCoupon/:id",
-        element:<EditCoupon />
+        path: "/admin/editCoupon/:id",
+        element: <EditCoupon />
       },
       {
-        path:"/admin/userList",
-        element:<UserList />
+        path: "/admin/userList",
+        element: <UserList />
       },
     ]
   }
@@ -81,7 +82,9 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-      <RouterProvider router={router} />
+        <ProductProvider>
+          <RouterProvider router={router} />
+        </ProductProvider>
       </CartProvider>
     </AuthProvider>
   );
