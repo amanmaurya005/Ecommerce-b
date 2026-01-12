@@ -15,7 +15,12 @@ function Register() {
     password: "",
     role: "",
   });
-  const {showPassword,setShowPassword}=useAuth();
+  const { showPassword, setShowPassword } = useAuth();
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  const [emailForOtp, setEmailForOtp] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -36,6 +41,7 @@ function Register() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     const passwordRegex = /(?=.*\d)(?=.*[@]).+$/;
 
     if (!passwordRegex.test(data.password)) {
@@ -49,9 +55,12 @@ function Register() {
       await instance.post("/user/register", data, {
         headers: { "Content-Type": "application/json" },
       });
+    
+     toast.success(data.message || "OTP sent to your email. Please verify.");
 
-      toast.success("User registration successful!");
-      navigate("/login");
+      setOtpSent(true);
+      setEmailForOtp(data.email);
+
     } catch (error) {
       console.error("Registration Error:", error);
 
@@ -62,6 +71,23 @@ function Register() {
       }
     }
   }
+
+   async function verifyOtpHandler() {
+    try {
+      const res = await instance.post("/user/verify-otp", {
+        email: emailForOtp,
+        otp: otp,
+      });
+
+      toast.success(res.data.message || "OTP verified successfully");
+      setIsVerified(true);
+
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "OTP verification failed");
+    }
+  }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -146,22 +172,22 @@ function Register() {
               Password
             </label>
             <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter password"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3  rounded-lg text-sm outline-none border border-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-gray-900"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-            >
-              {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-            </button>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                name="password"
+                value={data.password}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3  rounded-lg text-sm outline-none border border-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-gray-900"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+              </button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Must contain at least 1 number and 1 @ symbol
@@ -171,10 +197,41 @@ function Register() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-gray-600 text-white py-3 rounded-lg font-medium hover:bg-gray-700 transition"
+            disabled={otpSent && !isVerified}
+            className={`w-full py-3 rounded-lg font-medium transition ${
+              otpSent && !isVerified
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gray-600 text-white hover:bg-gray-700"
+            }`}
           >
             Register
           </button>
+
+            {/* 🔽 OTP SECTION */}
+        {otpSent && !isVerified && (
+          <div className="mt-6 space-y-4">
+            <h3 className="text-center font-medium text-gray-800">
+              Enter OTP sent to your email
+            </h3>
+
+            <input
+              type="text"
+              placeholder="Enter 6 digit OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg outline-none border-gray-900 focus:ring-2 focus:ring-gray-900"
+            />
+
+            <button
+              type="button"
+              onClick={verifyOtpHandler}
+              className="w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition"
+            >
+              Verify OTP
+            </button>
+          </div>
+        )}
+
         </form>
 
         {/* Login */}

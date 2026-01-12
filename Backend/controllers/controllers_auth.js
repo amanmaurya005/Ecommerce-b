@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config"
+import { sendOtpEmail } from "../utils/sendEmail.js";
+import { createHash } from "crypto";
+
 
 export async function getUsers(req, res) {
     try {
@@ -21,10 +24,13 @@ export async function getUsers(req, res) {
 export async function loginUser(req, res) {
     try {
         const data = req.body;
+        if (!UserExist.isVerified) {
+            return res.status(403).json({ message: "Please verify your account first" });
+        }
+
         const UserExist = await Auth.findOne({ email: data.email });
         if (!UserExist)
             return res.status(400).json({ message: "User not found" });
-
 
 
         const doesPasswordMatch = await bcrypt.compare(data.password, UserExist.password);
@@ -49,6 +55,8 @@ export async function loginUser(req, res) {
             sameSite: "none",
             maxAge: 3600 * 1000,
         });
+
+
 
         return res.status(200).json({ message: "LogedIn" });
 
@@ -100,9 +108,23 @@ export async function registerUser(req, res) {
         data.password = hashedPassword;
         const newUser = new Auth(data);
 
+        // Generate OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const hashedOtp = createHash("sha256").update(otp).digest("hex");
+
+        data.otp = hashedOtp;
+        data.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+        data.isVerified = false;
+
+
         await newUser.save();
 
-        res.status(201).json({ message: "User registered successfully", user: newUser });
+
+
+
+        await sendOtpEmail(data.email, data.name, otp);
+
+        res.status(201).json({ message: "User registered successfully. Email sent", user: newUser });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
     }
@@ -149,3 +171,47 @@ export async function updateUser(req, res) {
         return res.status(500).json({ message: error.message });
     }
 }
+
+export async function verifyOtp(req, res) {
+    try {
+        const { email, otp } = req.body;
+
+        const user = await Auth.findOne({ email });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (user.isVerified) {
+            return res.status(400).json({ message: "User already verified" });
+        }
+
+      
+    if (!user.otp || !user.otpExpiry) {
+      return res.status(400).json({ message: "OTP not found. Please register again." });
+    }
+
+    // Correct expiry check
+    if (new Date(user.otpExpiry).getTime() < Date.now()) {
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+        const hashedOtp = createHash("sha256").update(otp).digest("hex");
+
+        if (hashedOtp !== user.otp) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+
+        user.isVerified = true;
+        user.otp = undefined;
+        user.otpExpiry = undefined;
+
+        await user.save();
+
+        res.status(200).json({ message: "Account verified successfully. You can now login." });
+
+    } catch (error) {
+        console.error("Verify OTP Error:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
+
+
+

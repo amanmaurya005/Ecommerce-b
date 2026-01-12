@@ -52,6 +52,14 @@ function AdminDashboard() {
               Create Coupon
             </Link>
           </li>
+          <li>
+            <Link
+              to="/admin/addCategory"
+              className="block px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+              Add Category
+            </Link>
+          </li>
         </ul>
 
         <div className="p-4 border-t border-gray-700">
@@ -93,7 +101,7 @@ function AdminDashboard() {
           <div className="bg-white rounded-xl shadow p-6">
             <h3 className="text-sm text-gray-500">Revenue</h3>
             <p className="text-2xl font-bold text-green-600 mt-2">
-             -
+              -
             </p>
           </div>
         </div>

@@ -38,24 +38,24 @@ function AdminProduct() {
     <div className="min-h-screen w-full bg-gray-50 px-6 py-8">
       {/* Header */}
       <div className="mb-6 flex justify-between">
-       <div>
-         <h1 className="text-3xl font-bold text-gray-900">
-          Product Control Center
-        </h1>
-        <p className="text-sm text-gray-500">
-          Fast access to all products & operations
-        </p>
-       </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Product Control Center
+          </h1>
+          <p className="text-sm text-gray-500">
+            Fast access to all products & operations
+          </p>
+        </div>
 
-      
-          
-            <Link
-              to="/admin/add-products"
-              className="bg-gray-600 text-white w-30 py-3.5 px-2.5 rounded-lg font-medium hover:bg-gray-700 transition"
-            >
-              Add Products
-            </Link>
-        
+
+
+        <Link
+          to="/admin/add-products"
+          className="bg-gray-600 text-white w-30 py-3.5 px-2.5 rounded-lg font-medium hover:bg-gray-700 transition"
+        >
+          Add Products
+        </Link>
+
 
       </div>
 
@@ -70,7 +70,9 @@ function AdminProduct() {
             <div className="flex items-center gap-5">
               <div className="h-20 w-20">
                 <img
-                  src={`${BASEURL}/${item.image}`}
+                  src={item.image?.startsWith("http")
+                    ? item.image
+                    : `${BASEURL}/${item.image}`}
                   alt={item.name}
                   className="h-full w-full object-contain"
                 />

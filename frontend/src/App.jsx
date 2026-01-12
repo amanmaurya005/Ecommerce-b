@@ -16,6 +16,7 @@ import CouponList from "./Admin/pages/CouponList.jsx"
 import EditCoupon from "./Admin/pages/EditCoupon.jsx"
 import UserList from "./Admin/pages/UserList.jsx";
 import ProductProvider from "./contexts/ProductProvider.jsx";
+import AddCategory from "./Admin/pages/AddCategory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/userList",
         element: <UserList />
+      },
+      {
+        path: "/admin/addCategory",
+        element: <AddCategory />
       },
     ]
   }

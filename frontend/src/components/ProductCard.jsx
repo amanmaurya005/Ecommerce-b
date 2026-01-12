@@ -1,15 +1,26 @@
 import { PiCurrencyInrLight } from "react-icons/pi";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { toast } from "react-toastify";
 import instance from "../axiosConfig";
 import { useCart } from "../contexts/CartContext";
 
 function ProductCard({ product, slug }) {
-
   const BASEURL = import.meta.env.VITE_BASEURL;
+
+  let imageUrl = "";
+
+  if (product.image) {
+    const img = product.image;
+
+    if (img.startsWith("http")) {
+      imageUrl = img;
+    } else {
+      imageUrl = `${BASEURL}/${product.image}`;
+    }
+  }
+
   const { isLoggedIn } = useAuth();
-  // const { slug } = useParams();
   const navigate = useNavigate();
   const { cartItems } = useCart();
 
@@ -35,7 +46,7 @@ function ProductCard({ product, slug }) {
       navigate("/cart");
     } catch (error) {
       toast.error("Something went wrong. Try again!");
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -46,7 +57,7 @@ function ProductCard({ product, slug }) {
       <div className="h-48 w-full overflow-hidden flex items-center justify-center rounded-t-xl bg-gray-50 p-4">
         <Link to={`/product/${slug}`}>
           <img
-            src={`${BASEURL}/${product.image}`}
+            src={imageUrl}
             alt={product.name}
             className="h-full object-contain transition-transform duration-300 hover:scale-105"
           />
@@ -77,18 +88,15 @@ function ProductCard({ product, slug }) {
           onClick={() => addToCart(product._id)}
           disabled={isInCart}
           className={`mt-4 w-full rounded-lg py-2 text-sm font-semibold transition-all
-    ${isInCart
+            ${isInCart
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
               : "bg-gray-900 text-white hover:bg-gray-800 active:scale-95"
-            } `}
+            }`}
         >
           {isInCart ? "In Cart ✓" : "Add to Cart"}
         </button>
       </div>
     </div>
-
-
-
   );
 }
 

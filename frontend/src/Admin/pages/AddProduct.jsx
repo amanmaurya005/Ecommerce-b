@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import instance from "../../axiosConfig";
+import { useEffect } from "react";
 
 function AddProduct() {
   const [data, setData] = useState({
@@ -12,6 +13,23 @@ function AddProduct() {
     discountedPrice: "",
     image: null,
   });
+   const [categories, setCategories] = useState([]);
+
+    // ================= FETCH CATEGORIES =================
+  async function fetchCategories() {
+    try {
+      const res = await instance.get("/category");
+      setCategories(res.data);
+      console.log(res.data)
+    } catch (error) {
+      console.error("Fetch Category Error:", error);
+      toast.error("Failed to load categories");
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   function handleChange(e) {
     const { name, value, files } = e.target;
@@ -78,6 +96,8 @@ function AddProduct() {
     });
   }
 
+  
+
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-10">
       <div className="mx-auto max-w-3xl rounded-2xl bg-white p-8 shadow-lg">
@@ -132,13 +152,20 @@ function AddProduct() {
             <label className="mb-1 block text-sm font-medium text-gray-600">
               Category
             </label>
-            <input
-              type="text"
+               <select
               name="category"
               value={data.category}
               onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-500"
-            />
+              className="w-full rounded-lg border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-500 bg-white"
+            >
+              <option value="">-- Select Category --</option>
+
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Description */}

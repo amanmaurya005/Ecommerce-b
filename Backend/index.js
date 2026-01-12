@@ -12,9 +12,15 @@ import cookieParser from "cookie-parser";
 import couponRouter from "./routes/coupon.js"
 import githubUser from "./routes/githubUser.js"
 import "dotenv/config";
+import { checkAuth } from "./middleWares/middleAuth.js";
+import categoryRouter from "./routes/category.js";
+import recommendRoutes from "./routes/recommend.js";
+import groqRouter from "./routes/groq.js";
+
+
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 app.use(cookieParser());
 
@@ -39,6 +45,11 @@ app.use("/product", productRouter);
 app.use("/check", checkRouter);
 app.use("/cart", cartRouter);
 app.use("/coupon", couponRouter);
+app.use("/category", categoryRouter);
+app.use("/recommend", recommendRoutes);
+app.use("/api/groq", groqRouter);
+
+
 // app.use("/user", githubUser);
 
 app.listen(3000, () => console.log("Server started at port 3000"));

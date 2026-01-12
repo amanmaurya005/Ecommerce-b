@@ -1,11 +1,14 @@
 import Product from "../models/models_product.js";
 import mongoose from "mongoose";
+import cloudinary from "../middleWares/Cloudinary.js";
 
 export async function addProduct(req, res) {
   try {
     const newRecord = req.body;
     if (req.file) {
-      newRecord.image = req.file.path.replace(/\\/g, "/");
+    const result  = await cloudinary.uploader.upload( req.file.path.replace(/\\/g, "/"),
+  {folder:"product"});
+      newRecord.image = result.secure_url
     }
     const newProduct = new Product(newRecord);
     await newProduct.save();
@@ -77,7 +80,7 @@ export async function getSingleProduct(req, res) {
   try {
     const {slug}=req.params;
 
-    const singleProduct = await Product.find({slug:slug});
+    const singleProduct = await Product.find({slug:slug}).populate("category");
     return res.status(200).json(singleProduct);
   } catch (error) {
     return res.status(500).json({ message: error.message });

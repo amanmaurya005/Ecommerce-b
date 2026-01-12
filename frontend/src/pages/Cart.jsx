@@ -96,7 +96,9 @@ const Cart = () => {
                 >
                   {/* Image */}
                   <img
-                    src={`${BASEURL}/${item.productId.image}`}
+                    src={item.productId.image?.startsWith("http")
+                      ? item.productId.image
+                      : `${BASEURL}/${item.productId.image}`}
                     alt={item.productId.name}
                     className="w-28 h-28 object-contain"
                   />
