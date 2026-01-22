@@ -30,6 +30,8 @@
     "mongodb": "^7.0.0",
     "mongoose": "^9.0.1",
     "multer": "^2.0.2",
-    "node-fetch": "^3.3.2"
+    "mysql2": "^3.16.1",
+    "node-fetch": "^3.3.2",
+    "sequelize": "^6.37.7"
   }
 }

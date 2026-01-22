@@ -7,7 +7,7 @@ function AddProduct() {
   const [data, setData] = useState({
     name: "",
     slug: "",
-    category: "",
+    category_id: "",
     description: "",
     originalPrice: "",
     discountedPrice: "",
@@ -79,6 +79,7 @@ function AddProduct() {
         product,
         { withCredentials: true }
       );
+      console.log(data)
 
       toast.success("Product added successfully!");
     } catch (error) {
@@ -88,7 +89,7 @@ function AddProduct() {
     setData({
       name: "",
       slug: "",
-      category: "",
+      category_id: "",
       description: "",
       originalPrice: "",
       discountedPrice: "",
@@ -153,15 +154,15 @@ function AddProduct() {
               Category
             </label>
                <select
-              name="category"
-              value={data.category}
+              name="category_id"
+              value={data.category_id}
               onChange={handleChange}
               className="w-full rounded-lg border px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-500 bg-white"
             >
               <option value="">-- Select Category --</option>
 
               {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
+                <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}

@@ -1,217 +1,472 @@
-import Auth from "../models/models_auth.js";
-import mongoose from "mongoose";
+// import Auth from "../models/models_auth.js";
+// import mongoose from "mongoose";
+// import bcrypt from "bcryptjs";
+// import jwt from "jsonwebtoken";
+// import "dotenv/config"
+// import { sendOtpEmail } from "../utils/sendEmail.js";
+// import { createHash } from "crypto";
+
+
+// export async function getUsers(req, res) {
+//     try {
+//         const users = await Auth.find();
+//         if (!users || users.length == 0) {
+//             return res.status(400).json({ message: "No Users Found" });
+//         }
+//         else {
+//             return res.status(200).json(users)
+//         }
+//     }
+//     catch (error) {
+//         return res.status(500).json({ message: error.message })
+//     }
+// }
+// export async function loginUser(req, res) {
+//     try {
+//         const data = req.body;
+//         if (!UserExist.isVerified) {
+//             return res.status(403).json({ message: "Please verify your account first" });
+//         }
+
+//         const UserExist = await Auth.findOne({ email: data.email });
+//         if (!UserExist)
+//             return res.status(400).json({ message: "User not found" });
+
+
+//         const doesPasswordMatch = await bcrypt.compare(data.password, UserExist.password);
+//         if (!doesPasswordMatch)
+//             return res.status(404).json({ message: "password not match" });
+//         console.log(doesPasswordMatch);
+
+//         if (UserExist.role !== "user")
+//             return res.status(404).json({ message: "You are not a user" });
+
+//         const auth_token = jwt.sign({
+//             id: UserExist._id,
+//             role: UserExist.role,
+//         },
+//             process.env.JWT_SECRET,
+//             { expiresIn: "3h" }
+//         );
+
+//         res.cookie("auth_token", auth_token, {
+//             httpOnly: true,
+//             secure: true,
+//             sameSite: "none",
+//             maxAge: 3600 * 1000,
+//         });
+
+
+
+//         return res.status(200).json({ message: "LoggedIn" });
+
+//     }
+//     catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+
+
+// }
+// export async function logoutUser(req, res) {
+//     try {
+//         res.clearCookie("auth_token", {
+//             httpOnly: true,
+//             secure: true,
+//             sameSite: "none",
+//             // any negative time
+
+//         });
+//         return res.status(200).json({ message: "user Logged out" });
+
+//     }
+//     catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+// export async function registerUser(req, res) {
+//     try {
+//         const data = req.body;
+
+//         //  Check if user already exists
+//         const existEmail = await Auth.findOne({ email: data.email });
+//         if (existEmail) {
+//             return res.status(400).json({ message: "Email already exists" });
+//         }
+//         const existUser = await Auth.findOne({ username: data.username })
+//         if (existUser) {
+//             return res.status(400).json({ message: "Username already exists" });
+//         }
+//         const existPhone = await Auth.findOne({ phone: data.phone });
+//         if (existPhone) {
+//             return res.status(400).json({ message: "Phone already exists" });
+
+//         };
+
+//         data.role = "user";
+//         //  Password Hashing
+//         const hashedPassword = await bcrypt.hash(data.password, 10);
+//         data.password = hashedPassword;
+//         const newUser = new Auth(data);
+
+//         // Generate OTP
+//         const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//         const hashedOtp = createHash("sha256").update(otp).digest("hex");
+
+//         data.otp = hashedOtp;
+//         data.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+//         data.isVerified = false;
+
+
+//         await newUser.save();
+
+
+
+
+//         await sendOtpEmail(data.email, data.name, otp);
+
+//         res.status(201).json({ message: "User registered successfully. Email sent", user: newUser });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// };
+
+// export async function deleteUser(req, res) {
+//     try {
+//         const { id } = req.params;
+//         if (!id) {
+//             return res.status(400).json({ message: "Id Parameter is required" });
+//         }
+//         const userDeleted = await Auth.findByIdAndDelete(id);
+//         if (!userDeleted) {
+//             return res.status(404).json({ message: "User not found with this parameter" });
+//         }
+//         return res.status(200).json({ message: "User deleted" });
+//     }
+//     catch (error) {
+//         return res.status(500).json({ message: error.message })
+//     }
+// }
+// export async function updateUser(req, res) {
+//     try {
+//         const { id } = req.params;
+//         const updatedRecord = req.body;
+//         if (!id) {
+//             return res.status(400).json({ message: "ID parameter is required" });
+//         }
+//         if (!updatedRecord) {
+//             return res
+//                 .status(400)
+//                 .json({ message: "Updated product schema is required" });
+//         }
+
+//         const updatedUser = await Auth.findByIdAndUpdate(id, updatedRecord, {
+//             new: true,
+//         });
+//         if (!updatedUser)
+//             return res.status(404).json({ message: "Could not update this product" });
+
+//         return res.status(200).json({ message: "Product Updated", product: updatedUser });
+
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+
+// export async function verifyOtp(req, res) {
+//     try {
+//         const { email, otp } = req.body;
+
+//         const user = await Auth.findOne({ email });
+//         if (!user) return res.status(404).json({ message: "User not found" });
+
+//         if (user.isVerified) {
+//             return res.status(400).json({ message: "User already verified" });
+//         }
+
+      
+//     if (!user.otp || !user.otpExpiry) {
+//       return res.status(400).json({ message: "OTP not found. Please register again." });
+//     }
+
+//     // Correct expiry check
+//     if (new Date(user.otpExpiry).getTime() < Date.now()) {
+//       return res.status(400).json({ message: "OTP has expired" });
+//     }
+
+//         const hashedOtp = createHash("sha256").update(otp).digest("hex");
+
+//         if (hashedOtp !== user.otp) {
+//             return res.status(400).json({ message: "Invalid OTP" });
+//         }
+
+//         user.isVerified = true;
+//         user.otp = undefined;
+//         user.otpExpiry = undefined;
+
+//         await user.save();
+
+//         res.status(200).json({ message: "Account verified successfully. You can now login." });
+
+//     } catch (error) {
+//         console.error("Verify OTP Error:", error);
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+import pool from "../db/mysql.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import "dotenv/config"
+import "dotenv/config";
 import { sendOtpEmail } from "../utils/sendEmail.js";
 import { createHash } from "crypto";
 
-
+// ================= GET USERS =================
 export async function getUsers(req, res) {
-    try {
-        const users = await Auth.find();
-        if (!users || users.length == 0) {
-            return res.status(400).json({ message: "No Users Found" });
-        }
-        else {
-            return res.status(200).json(users)
-        }
+  try {
+    const [users] = await pool.query("SELECT * FROM users");
+
+    if (users.length === 0) {
+      return res.status(400).json({ message: "No Users Found" });
     }
-    catch (error) {
-        return res.status(500).json({ message: error.message })
-    }
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 }
+
+// ================= LOGIN =================
 export async function loginUser(req, res) {
-    try {
-        const data = req.body;
-        if (!UserExist.isVerified) {
-            return res.status(403).json({ message: "Please verify your account first" });
-        }
+  try {
+    const { email, password } = req.body;
 
-        const UserExist = await Auth.findOne({ email: data.email });
-        if (!UserExist)
-            return res.status(400).json({ message: "User not found" });
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
 
-
-        const doesPasswordMatch = await bcrypt.compare(data.password, UserExist.password);
-        if (!doesPasswordMatch)
-            return res.status(404).json({ message: "password not match" });
-        console.log(doesPasswordMatch);
-
-        if (UserExist.role !== "user")
-            return res.status(404).json({ message: "You are not a user" });
-
-        const auth_token = jwt.sign({
-            id: UserExist._id,
-            role: UserExist.role,
-        },
-            process.env.JWT_SECRET,
-            { expiresIn: "3h" }
-        );
-
-        res.cookie("auth_token", auth_token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 3600 * 1000,
-        });
-
-
-
-        return res.status(200).json({ message: "LogedIn" });
-
-    }
-    catch (error) {
-        return res.status(500).json({ message: error.message });
+    if (rows.length === 0) {
+      return res.status(400).json({ message: "User not found" });
     }
 
+    const user = rows[0];
 
+    if (!user.isVerified) {
+      return res
+        .status(403)
+        .json({ message: "Please verify your account first" });
+    }
+
+    const doesPasswordMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!doesPasswordMatch) {
+      return res.status(404).json({ message: "Password not match" });
+    }
+
+    if (user.role !== "user") {
+      return res.status(404).json({ message: "You are not a user" });
+    }
+
+    const auth_token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "3h" }
+    );
+
+    res.cookie("auth_token", auth_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({ message: "LoggedIn" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 }
+
+// ================= LOGOUT =================
 export async function logoutUser(req, res) {
-    try {
-        res.clearCookie("auth_token", {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            // any negative time
+  try {
+    res.clearCookie("auth_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
 
-        });
-        return res.status(200).json({ message: "user Logged out" });
-
-    }
-    catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
+    return res.status(200).json({ message: "User Logged out" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 }
+
+// ================= REGISTER =================
 export async function registerUser(req, res) {
-    try {
-        const data = req.body;
+  try {
+    const data = req.body;
 
-        //  Check if user already exists
-        const existEmail = await Auth.findOne({ email: data.email });
-        if (existEmail) {
-            return res.status(400).json({ message: "Email already exists" });
-        }
-        const existUser = await Auth.findOne({ username: data.username })
-        if (existUser) {
-            return res.status(400).json({ message: "Username already exists" });
-        }
-        const existPhone = await Auth.findOne({ phone: data.phone });
-        if (existPhone) {
-            return res.status(400).json({ message: "Phone already exists" });
-
-        };
-
-        data.role = "user";
-        //  Password Hashing
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        data.password = hashedPassword;
-        const newUser = new Auth(data);
-
-        // Generate OTP
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const hashedOtp = createHash("sha256").update(otp).digest("hex");
-
-        data.otp = hashedOtp;
-        data.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
-        data.isVerified = false;
-
-
-        await newUser.save();
-
-
-
-
-        await sendOtpEmail(data.email, data.name, otp);
-
-        res.status(201).json({ message: "User registered successfully. Email sent", user: newUser });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+    // Email check
+    const [emailExist] = await pool.query(
+      "SELECT id FROM users WHERE email = ?",
+      [data.email]
+    );
+    if (emailExist.length > 0) {
+      return res.status(400).json({ message: "Email already exists" });
     }
-};
 
+    // Username check
+    const [usernameExist] = await pool.query(
+      "SELECT id FROM users WHERE username = ?",
+      [data.username]
+    );
+    if (usernameExist.length > 0) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    // Phone check
+    const [phoneExist] = await pool.query(
+      "SELECT id FROM users WHERE phone = ?",
+      [data.phone]
+    );
+    if (phoneExist.length > 0) {
+      return res.status(400).json({ message: "Phone already exists" });
+    }
+
+    // Password hash
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    // OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const hashedOtp = createHash("sha256").update(otp).digest("hex");
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
+    await pool.query(
+      `INSERT INTO users 
+      (name, email, username, phone, password, role, otp, otpExpiry, isVerified)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        data.name,
+        data.email,
+        data.username,
+        data.phone,
+        hashedPassword,
+        "user",
+        hashedOtp,
+        otpExpiry,
+        false,
+      ]
+    );
+
+    await sendOtpEmail(data.email, data.name, otp);
+
+    res.status(201).json({
+      message: "User registered successfully. Email sent",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+// ================= DELETE USER =================
 export async function deleteUser(req, res) {
-    try {
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({ message: "Id Parameter is required" });
-        }
-        const userDeleted = await Auth.findByIdAndDelete(id);
-        if (!userDeleted) {
-            return res.status(404).json({ message: "User not found with this parameter" });
-        }
-        return res.status(200).json({ message: "User deleted" });
+  try {
+    const { id } = req.params;
+
+    const [result] = await pool.query(
+      "DELETE FROM users WHERE id = ?",
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
     }
-    catch (error) {
-        return res.status(500).json({ message: error.message })
-    }
+
+    return res.status(200).json({ message: "User deleted" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 }
+
+// ================= UPDATE USER =================
 export async function updateUser(req, res) {
-    try {
-        const { id } = req.params;
-        const updatedRecord = req.body;
-        if (!id) {
-            return res.status(400).json({ message: "ID parameter is required" });
-        }
-        if (!updatedRecord) {
-            return res
-                .status(400)
-                .json({ message: "Updated product schema is required" });
-        }
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
 
-        const updatedUser = await Auth.findByIdAndUpdate(id, updatedRecord, {
-            new: true,
-        });
-        if (!updatedUser)
-            return res.status(404).json({ message: "Could not update this product" });
+    const [result] = await pool.query(
+      "UPDATE users SET ? WHERE id = ?",
+      [updatedData, id]
+    );
 
-        return res.status(200).json({ message: "Product Updated", product: updatedUser });
-
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Could not update user" });
     }
+
+    return res.status(200).json({ message: "User Updated" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 }
 
+// ================= VERIFY OTP =================
 export async function verifyOtp(req, res) {
-    try {
-        const { email, otp } = req.body;
+  try {
+    const { email, otp } = req.body;
 
-        const user = await Auth.findOne({ email });
-        if (!user) return res.status(404).json({ message: "User not found" });
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
 
-        if (user.isVerified) {
-            return res.status(400).json({ message: "User already verified" });
-        }
-
-      
-    if (!user.otp || !user.otpExpiry) {
-      return res.status(400).json({ message: "OTP not found. Please register again." });
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Correct expiry check
+    const user = rows[0];
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User already verified" });
+    }
+
+    if (!user.otp || !user.otpExpiry) {
+      return res
+        .status(400)
+        .json({ message: "OTP not found. Please register again." });
+    }
+
     if (new Date(user.otpExpiry).getTime() < Date.now()) {
       return res.status(400).json({ message: "OTP has expired" });
     }
 
-        const hashedOtp = createHash("sha256").update(otp).digest("hex");
+    const hashedOtp = createHash("sha256").update(otp).digest("hex");
 
-        if (hashedOtp !== user.otp) {
-            return res.status(400).json({ message: "Invalid OTP" });
-        }
-
-        user.isVerified = true;
-        user.otp = undefined;
-        user.otpExpiry = undefined;
-
-        await user.save();
-
-        res.status(200).json({ message: "Account verified successfully. You can now login." });
-
-    } catch (error) {
-        console.error("Verify OTP Error:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+    if (hashedOtp !== user.otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
     }
+
+    await pool.query(
+      "UPDATE users SET isVerified = ?, otp = NULL, otpExpiry = NULL WHERE id = ?",
+      [true, user.id]
+    );
+
+    res.status(200).json({
+      message: "Account verified successfully. You can now login.",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
-
-
-
