@@ -22,6 +22,8 @@ function Login() {
 
 
   async function handleGoogleSuccess(credentialResponse) {
+    console.log(credentialResponse);
+    
     try {
       await instance.post("/user/google-login", {
         token: credentialResponse.credential,
