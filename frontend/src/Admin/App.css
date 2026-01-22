@@ -1,0 +1,109 @@
+                                        /* Dashborard css */
+/* Admin Layout */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 240px;
+  background: #2d2d44;
+  color: white;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-logo {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar ul li {
+  margin: 15px 0;
+}
+
+.admin-sidebar ul li a {
+  color: #e1e1ff;
+  text-decoration: none;
+  font-size: 17px;
+  transition: 0.3s;
+}
+
+.admin-sidebar ul li a:hover {
+  color: #c9c7ff;
+  margin-left: 4px;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #ff5252;
+  color: white;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-btn:hover {
+  background: #ff3131;
+}
+
+/* Main Content */
+.admin-main {
+  flex: 1;
+  padding: 30px;
+  background: #f5f5ff;
+}
+
+.admin-header h1 {
+  font-size: 28px;
+  color: #3f3d56;
+}
+
+/* Stats Cards */
+.stats-container {
+  display: flex;
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(80, 80, 120, 0.2);
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #6C5CE7;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* Chart Box */
+.chart-box {
+  margin-top: 40px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(80, 80, 120, 0.2);
+}
+
