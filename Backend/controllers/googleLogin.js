@@ -3,15 +3,16 @@ import Auth from "../models/models_auth.js";
 import jwt from "jsonwebtoken";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+console.log("VERIFYING WITH CLIENT ID:", process.env.GOOGLE_CLIENT_ID);
 
 export const googleLogin = async (req, res) => {
   try {
     const { token } = req.body;
-    // console.log(req.body)
+    console.log("received body",req.body)
 
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      requiredAudience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const { email, name, picture, sub } = ticket.getPayload();
