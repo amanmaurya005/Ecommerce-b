@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import instance from "../axiosConfig";
 import socket from "../socket";
 import { toast } from "react-toastify";
@@ -9,55 +9,32 @@ function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isFirstLoad = useRef(true);
-
-  // 🔹 Fetch cart normally (first time)
   useEffect(() => {
     getCart();
   }, []);
 
-  // 🔹 SOCKET LISTENER
+  // 🔥 SOCKET LISTENER
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); 
-    // ⚠️ userId login ke time localStorage me set hona chahiye
-
-    if (userId) {
-      socket.emit("join", userId);
-    }
-
     socket.on("cart:update", (updatedCart) => {
       setCartItems(updatedCart);
     });
 
-    return () => {
-      socket.off("cart:update");
-    };
+    return () => socket.off("cart:update");
   }, []);
 
-  async function getCart(showToast = false) {
+  async function getCart() {
     try {
       const res = await instance.get("/cart/");
       setCartItems(res.data);
     } catch (error) {
-      console.error(error);
-      if (showToast) {
-        toast.error("Failed to load cart");
-      }
+      toast.error("Failed to load cart");
     } finally {
       setLoading(false);
-      isFirstLoad.current = false;
     }
   }
 
   return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        setCartItems,
-        getCart,
-        loading,
-      }}
-    >
+    <CartContext.Provider value={{ cartItems, setCartItems, loading }}>
       {children}
     </CartContext.Provider>
   );
@@ -68,6 +45,7 @@ export function useCart() {
 }
 
 export default CartProvider;
+
 
 
 

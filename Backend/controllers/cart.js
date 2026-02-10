@@ -23,18 +23,14 @@ export async function addToCart(req, res) {
     const updatedCart = await Cart.find({ userId: req.userId })
       .populate("productId");
 
-    // 🔥 SOCKET EVENT
+    // 🔥 REAL-TIME
     io.to(req.userId).emit("cart:update", updatedCart);
 
-    return res.status(200).json({
-      message: "Cart updated",
-      cart: updatedCart,
-    });
+    return res.status(200).json(updatedCart);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 }
-
 
 // export async function addToCart(req, res) {
 //   try {
@@ -88,17 +84,14 @@ export async function removeCart(req, res) {
     const updatedCart = await Cart.find({ userId: req.userId })
       .populate("productId");
 
-    // 🔥 REAL-TIME UPDATE
     io.to(req.userId).emit("cart:update", updatedCart);
 
-    return res.status(200).json({
-      message: "Item removed from cart",
-      cart: updatedCart,
-    });
+    return res.status(200).json(updatedCart);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 }
+
 
 
 // export async function removeCart(req, res) {
@@ -120,12 +113,8 @@ export async function removeCart(req, res) {
 
 export async function updateCartQuantity(req, res) {
   try {
-    if (!req.userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const { id } = req.params; // cart item id
-    const { action } = req.body; // inc | dec
+    const { id } = req.params;
+    const { action } = req.body;
 
     const cartItem = await Cart.findOne({
       _id: id,
@@ -136,20 +125,14 @@ export async function updateCartQuantity(req, res) {
       return res.status(404).json({ message: "Cart item not found" });
     }
 
-    if (action === "inc") {
-      cartItem.quantity += 1;
-    }
-
-    if (action === "dec") {
-      cartItem.quantity = Math.max(1, cartItem.quantity - 1);
-    }
+    if (action === "inc") cartItem.quantity += 1;
+    if (action === "dec") cartItem.quantity = Math.max(1, cartItem.quantity - 1);
 
     await cartItem.save();
 
     const updatedCart = await Cart.find({ userId: req.userId })
       .populate("productId");
 
-    // 🔥 REAL-TIME UPDATE
     io.to(req.userId).emit("cart:update", updatedCart);
 
     return res.status(200).json(updatedCart);
@@ -157,6 +140,7 @@ export async function updateCartQuantity(req, res) {
     return res.status(500).json({ message: error.message });
   }
 }
+
 
 
 // export async function updateCartQuantity(req, res) {

@@ -1,6 +1,8 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
 import connectToDB from "./db/connect.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -28,13 +30,31 @@ export const io = new Server(server, {
   },
 });
 
+// 🔐 SOCKET AUTH USING COOKIE
+io.use((socket, next) => {
+  try {
+    const rawCookie = socket.handshake.headers.cookie;
+    if (!rawCookie) return next(new Error("No cookie"));
+
+    const parsed = cookie.parse(rawCookie);
+    const token = parsed.auth_token;
+    if (!token) return next(new Error("No token"));
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.userId = decoded.id;
+
+    next();
+  } catch (err) {
+    next(new Error("Socket auth failed"));
+  }
+});
+
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id);
 
-  socket.on("join", (userId) => {
-    socket.join(userId); // user-wise room
-    console.log("User joined room:", userId);
-  });
+  // 🔥 AUTO JOIN USER ROOM
+  socket.join(socket.userId);
+  console.log("User joined room:", socket.userId);
 
   socket.on("disconnect", () => {
     console.log("🔴 Socket disconnected:", socket.id);
