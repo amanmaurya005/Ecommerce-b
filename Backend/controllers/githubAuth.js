@@ -6,7 +6,7 @@ import Auth from "../models/models_auth.js";
 export const githubCallback = async (req, res) => {
   try {
     const { code } = req.query;
-    if (!code) return res.redirect("/login?error=github");
+    if (!code) return res.redirect(`${process.env.FRONTEND_URL}/login?error=github`);
 
     const tokenRes = await axios.post(
       "https://github.com/login/oauth/access_token",
@@ -30,7 +30,7 @@ export const githubCallback = async (req, res) => {
 
     const primaryEmail = emailRes.data.find(e => e.primary)?.email;
     if (!primaryEmail) {
-      return res.redirect("http://localhost:5173/login?error=email");
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=email`);
     }
 
     let user = await Auth.findOne({ email: primaryEmail });
@@ -55,14 +55,14 @@ export const githubCallback = async (req, res) => {
 
     res.cookie("auth_token", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
 
-    res.redirect("http://localhost:5173/login?github=success");
+    res.redirect(`${process.env.FRONTEND_URL}/login?github=success`);
   } catch (err) {
     console.error(err);
-    res.redirect("http://localhost:5173/login?error=github");
+    res.redirect(`${process.env.FRONTEND_URL}/login?error=github`);
   }
 };
 

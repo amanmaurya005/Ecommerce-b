@@ -52,7 +52,8 @@ function Login() {
 
 
   function handleGithubLogin() {
-    window.location.href = "http://localhost:3000/user/github";
+    const backendUrl = import.meta.env.VITE_BASEURL;
+    window.location.href = `${backendUrl}/user/github`;
   }
 
   async function handleSubmit(e) {
