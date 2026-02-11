@@ -18,6 +18,7 @@ import couponRouter from "./routes/coupon.js";
 import categoryRouter from "./routes/category.js";
 import recommendRoutes from "./routes/recommend.js";
 import groqRouter from "./routes/groq.js";
+import githubUser from "./routes/githubUser.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -57,7 +58,7 @@ io.on("connection", (socket) => {
   console.log("User joined room:", socket.userId);
 
   socket.on("disconnect", () => {
-    console.log("🔴 Socket disconnected:", socket.id);
+    console.log("Socket disconnected:", socket.id);
   });
 });
 
@@ -85,6 +86,8 @@ app.use("/coupon", couponRouter);
 app.use("/category", categoryRouter);
 app.use("/recommend", recommendRoutes);
 app.use("/api/groq", groqRouter);
+app.use("/user/github", githubUser);
+
 
 server.listen(3000, () =>
   console.log("🚀 Server running on port 3000")

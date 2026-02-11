@@ -9,7 +9,7 @@ const authSchema = new Schema({
   googleId: { type: String, unique: true, sparse: true },
   githubId: { type: String, unique: true, sparse: true, },
   image: { type: String },
-  authProvider: { type: String, enum: ["local", "google"], default: "local", },
+  authProvider: { type: String, enum: ["local", "google", "github"], default: "local", },
   role: { type: String },
   otp: String,
   otpExpiry: Date,
@@ -19,10 +19,6 @@ const authSchema = new Schema({
   },
   emailVerifyToken: String,
   emailVerifyExpiry: Date,
-  isVerified: {
-    type: Boolean,
-    default: false
-  }
 },
   { timestamps: true }
 );

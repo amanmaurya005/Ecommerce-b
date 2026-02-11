@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import instance from "../axiosConfig";
 import { useAuth } from "../contexts/AuthProvider";
@@ -41,6 +41,15 @@ function Login() {
   function handleGoogleError() {
     alert("Google Login Failed");
   }
+
+  useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("github") === "success") {
+    setIsLoggedIn(true);
+    navigate("/");
+  }
+}, []);
+
 
   function handleGithubLogin() {
     window.location.href = "http://localhost:3000/user/github";

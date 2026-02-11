@@ -11,6 +11,8 @@ authRouter.post("/register", registerUser)
 authRouter.delete("/:id", deleteUser)
 authRouter.put("/:id", updateUser)
 authRouter.post("/google-login", googleLogin);
+
+
 authRouter.post("/verify-otp", verifyOtp);
 
 

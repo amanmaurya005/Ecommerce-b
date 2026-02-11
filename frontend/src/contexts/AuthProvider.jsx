@@ -46,7 +46,6 @@ function AuthProvider({ children }) {
             window.location.href = "/";
         }
         setIsLoggedIn(false);
-  setCartItems([]);
     }
 
     return (

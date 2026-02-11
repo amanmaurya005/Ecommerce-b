@@ -34,7 +34,7 @@ function CartProvider({ children }) {
   }
 
   return (
-    <CartContext.Provider value={{ cartItems, setCartItems, loading }}>
+    <CartContext.Provider value={{ cartItems,getCart, setCartItems, loading }}>
       {children}
     </CartContext.Provider>
   );
@@ -45,7 +45,6 @@ export function useCart() {
 }
 
 export default CartProvider;
-
 
 
 
